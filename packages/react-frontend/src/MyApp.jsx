@@ -32,7 +32,6 @@ function MyApp() {
   }  
 
   function fetchUsers() {
-    console.log("test")
     const promise = fetch("http://localhost:8000/users");
     return promise;
   }
@@ -40,7 +39,12 @@ function MyApp() {
   useEffect(() => {
     fetchUsers()
 	  .then((res) => res.json())
-	  .then((json) => setCharacters(json["users_list"]))
+	  .then((json) => {
+      if (!Array.isArray(json)) {
+        json = [json];
+      }
+      setCharacters(json)
+    })
 	  .catch((error) => { console.log(error); });
   }, [] );
 
@@ -52,7 +56,6 @@ function MyApp() {
       },
       body: JSON.stringify(person),
     });
-
     return promise;
   }
 
